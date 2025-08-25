@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Axios } from "../middlewares/Axios";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -13,7 +14,14 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login data:", formData);
+    try {
+      const response = await Axios.post("/auth/login", formData);
+      const { token, user } = response.data;
+      localStorage.setItem("coinshoptoken", token);
+      localStorage.setItem("coinshopuser", JSON.stringify(user));
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
