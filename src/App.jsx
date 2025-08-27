@@ -2,10 +2,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
-import { useAuthStore } from "./store/RootStore";
 import Login from "./pages/Login";
+import { useSelector } from "react-redux";
+import Admins from "./pages/Admins";
+
 function App() {
-  const { isAuth } = useAuthStore((state) => state);
+  const { isAuth } = useSelector((state) => state.user);
   const PublicRoutes = createBrowserRouter([{ path: "/", element: <Login /> }]);
   const SecuredRoutes = createBrowserRouter([
     {
@@ -14,10 +16,12 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "products", element: <Products /> },
+        { path: "admins", element: <Admins /> },
       ],
     },
   ]);
-  const router = isAuth ? SecuredRoutes : PublicRoutes;
+  const router = true ? SecuredRoutes : PublicRoutes;
+  // const router = isAuth ? SecuredRoutes : PublicRoutes;
   return <RouterProvider router={router} />;
 }
 export default App;

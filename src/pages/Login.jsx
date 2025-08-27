@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Axios } from "../middlewares/Axios";
+import { logout, login } from "../store/RootStore";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
@@ -17,6 +20,7 @@ function Login() {
     try {
       const response = await Axios.post("/auth/login", formData);
       const { token, user } = response.data;
+      dispatch(login(user));
       localStorage.setItem("coinshoptoken", token);
       localStorage.setItem("coinshopuser", JSON.stringify(user));
     } catch (error) {
@@ -52,12 +56,6 @@ function Login() {
             Login
           </button>
         </form>
-        <p className="text-sm text-center mt-4 text-gray-600">
-          Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Register
-          </Link>
-        </p>
       </div>
     </div>
   );

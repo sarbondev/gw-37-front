@@ -6,6 +6,6 @@ const token = localStorage.getItem("coinshoptoken") || "";
 export const Axios = axios.create({
   baseURL: BASE_API_URL,
   headers: {
-    Authorization: `bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   },
 });
