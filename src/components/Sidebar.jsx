@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, Users, FolderTree } from "lucide-react";
+import { LayoutDashboard, Package, Users } from "lucide-react";
 
 function Sidebar() {
   const location = useLocation();
@@ -19,11 +19,6 @@ function Sidebar() {
       path: "/admins",
       label: "Adminlar",
       icon: <Users size={20} />,
-    },
-    {
-      path: "/categories",
-      label: "Kategoriyalar",
-      icon: <FolderTree size={20} />,
     },
   ];
 

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Axios } from "../middlewares/Axios";
-import { logout, login } from "../store/RootStore";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const { isAuth } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
@@ -15,16 +15,27 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    if (isAuth) {
+      navigate("/");
+    }
+  }, [isAuth, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await Axios.post("/auth/login", formData);
-      const { token, user } = response.data;
-      dispatch(login(user));
-      localStorage.setItem("coinshoptoken", token);
-      localStorage.setItem("coinshopuser", JSON.stringify(user));
+
+      if (response) {
+        if (response.data.status === "success") {
+          const { token, user } = response.data;
+          localStorage.setItem("coinshoptoken", token);
+          localStorage.setItem("coinshopuser", JSON.stringify(user));
+          navigate("/");
+        }
+      }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

@@ -1,22 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const UserSlicer = createSlice({
-  name: "user",
+  name: "User",
   initialState: {
-    data: null,
+    data: {},
+    isPending: false,
+    isError: "",
     isAuth: false,
   },
   reducers: {
-    login(state, { payload }) {
+    getUserPending(state) {
+      state.isPending = true;
+      state.isError = "";
+    },
+    getUserSuccess(state, { payload }) {
       state.isAuth = true;
       state.data = payload;
+      state.isPending = false;
     },
-    logout(state) {
-      state.isAuth = false;
-      state.data = null;
+    getUserError(state, { payload }) {
+      state.isPending = false;
+      state.isError = payload;
     },
   },
 });
 
-export const { login, logout } = UserSlicer.actions;
+export const { getUserError, getUserPending, getUserSuccess } =
+  UserSlicer.actions;
 export default UserSlicer.reducer;
